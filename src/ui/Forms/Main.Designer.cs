@@ -74,6 +74,9 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripButtonSettings = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparatorHelp = new Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator();
             this.toolStripButtonHelp = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparatorTabii = new Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator();
+            this.toolStripButtonTabii = new System.Windows.Forms.ToolStripButton();
+           
             this.toolStripSeparatorToggle = new Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator();
             this.toolStripButtonSourceView = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLayout = new System.Windows.Forms.ToolStripButton();
@@ -277,9 +280,12 @@ namespace Nikse.SubtitleEdit.Forms
             this.showSessionKeyLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.leaveSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabiiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSplitterCheckForUpdates = new System.Windows.Forms.ToolStripSeparator();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabiiToolStripMenuItemGlossary = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabiiToolStripMenuItemContext = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripListView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setStylesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -706,7 +712,9 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripButtonBeautifyTimeCodes,
             this.toolStripButtonSettings,
             this.toolStripSeparatorHelp,
+            this.toolStripSeparatorTabii,
             this.toolStripButtonHelp,
+            this.toolStripButtonTabii,
             this.toolStripSeparatorToggle,
             this.toolStripButtonSourceView,
             this.toolStripButtonLayout,
@@ -987,6 +995,11 @@ namespace Nikse.SubtitleEdit.Forms
             // 
             this.toolStripSeparatorHelp.Name = "toolStripSeparatorHelp";
             this.toolStripSeparatorHelp.Size = new System.Drawing.Size(6, 29);
+
+              // toolStripSeparatorHelp
+            // 
+            this.toolStripSeparatorHelp.Name = "toolStripSeparatorTabii";
+            this.toolStripSeparatorHelp.Size = new System.Drawing.Size(6, 29);
             // 
             // toolStripButtonHelp
             // 
@@ -999,6 +1012,18 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripButtonHelp.Size = new System.Drawing.Size(36, 37);
             this.toolStripButtonHelp.Text = "Help";
             this.toolStripButtonHelp.Click += new System.EventHandler(this.ToolStripButtonHelpClick);
+            // 
+            // toolStripButtonTabii
+            // 
+            this.toolStripButtonTabii.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTabii.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.toolStripButtonTabii.Image = global::Nikse.SubtitleEdit.Properties.Resources.Help32;
+            this.toolStripButtonTabii.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.toolStripButtonTabii.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.toolStripButtonTabii.Name = "toolStripButtonTabii";
+            this.toolStripButtonTabii.Size = new System.Drawing.Size(36, 37);
+            this.toolStripButtonTabii.Text = "Tabii";
+            this.toolStripButtonTabii.Click += new System.EventHandler(this.ToolStripButtonTabiiClick);
             // 
             // toolStripSeparatorToggle
             // 
@@ -1154,6 +1179,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripMenuItemAutoTranslate,
             this.optionsToolStripMenuItem,
             this.toolStripMenuItemNetworking,
+            this.tabiiToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -2605,7 +2631,10 @@ namespace Nikse.SubtitleEdit.Forms
             this.wordListsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.wordListsToolStripMenuItem.Text = "Word lists...";
             this.wordListsToolStripMenuItem.Click += new System.EventHandler(this.WordListsToolStripMenuItemClick);
-            // 
+            //        
+
+
+
             // changeLanguageToolStripMenuItem
             // 
             this.changeLanguageToolStripMenuItem.Name = "changeLanguageToolStripMenuItem";
@@ -2674,6 +2703,21 @@ namespace Nikse.SubtitleEdit.Forms
             this.helpToolStripMenuItem.DropDownClosed += new System.EventHandler(this.MenuClosed);
             this.helpToolStripMenuItem.DropDownOpening += new System.EventHandler(this.MenuOpened);
             // 
+              // tabiiToolStripMenuItem
+            // 
+            this.tabiiToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            // this.checkForUpdatesToolStripMenuItem,
+            // this.toolStripMenuItemSplitterCheckForUpdates,
+            this.tabiiToolStripMenuItemGlossary,
+            this.tabiiToolStripMenuItemContext,
+            // this.aboutToolStripMenuItem
+            });
+            this.tabiiToolStripMenuItem.Name = "tabiiToolStripMenuItem";
+            this.tabiiToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
+            this.tabiiToolStripMenuItem.Text = "Tabii";
+            this.tabiiToolStripMenuItem.DropDownClosed += new System.EventHandler(this.MenuClosed);
+            this.tabiiToolStripMenuItem.DropDownOpening += new System.EventHandler(this.MenuOpened);
+            // 
             // checkForUpdatesToolStripMenuItem
             // 
             this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
@@ -2693,6 +2737,24 @@ namespace Nikse.SubtitleEdit.Forms
             this.helpToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
             this.helpToolStripMenuItem1.Text = "Help";
             this.helpToolStripMenuItem1.Click += new System.EventHandler(this.HelpToolStripMenuItem1Click);
+            // 
+
+            // tabiiToolStripMenuItemGlossary
+            // 
+            this.tabiiToolStripMenuItemGlossary.Name = "tabiiToolStripMenuItemGlossary";
+            // this.tabiiToolStripMenuItemGlossary.ShortcutKeys = System.Windows.Forms.Keys.F1;            
+            this.tabiiToolStripMenuItemGlossary.Size = new System.Drawing.Size(181, 22);
+            this.tabiiToolStripMenuItemGlossary.Text = "Glossary";
+            this.tabiiToolStripMenuItemGlossary.Click += new System.EventHandler(this.tabiiToolStripMenuItemGlossaryClick);
+            // 
+
+               // tabiiToolStripMenuItemContext
+            // 
+            this.tabiiToolStripMenuItemContext.Name = "tabiiToolStripMenuItemContext";
+            // this.tabiiToolStripMenuItemGlossary.ShortcutKeys = System.Windows.Forms.Keys.F1;            
+            this.tabiiToolStripMenuItemContext.Size = new System.Drawing.Size(181, 22);
+            this.tabiiToolStripMenuItemContext.Text = "Context";
+            this.tabiiToolStripMenuItemContext.Click += new System.EventHandler(this.tabiiToolStripMenuItemContextClick);
             // 
             // aboutToolStripMenuItem
             // 
@@ -6021,6 +6083,9 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItemGlossary;
+        private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItemContext;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
@@ -6051,8 +6116,10 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripButton toolStripButtonVisualSync;
         private Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator toolStripSeparatorFindReplace;
         private Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator toolStripSeparatorFixSyncSpell;
-        private Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator toolStripSeparatorHelp;
+        private Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator toolStripSeparatorHelp;       
         private System.Windows.Forms.ToolStripButton toolStripButtonHelp;
+        private System.Windows.Forms.ToolStripButton toolStripButtonTabii;
+        private Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator toolStripSeparatorTabii;
         private System.Windows.Forms.ToolStripStatusLabel labelStatus;
         private System.Windows.Forms.ToolStripMenuItem adjustDisplayTimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixToolStripMenuItem;

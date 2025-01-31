@@ -5666,7 +5666,8 @@ namespace Nikse.SubtitleEdit.Forms
                 if (_converted && _subtitle.OriginalFormat == newFormat && File.Exists(_fileName))
                 {
                     _converted = false;
-                };
+                }
+                ;
 
                 _formatManuallyChanged = _converted;
             }
@@ -6350,6 +6351,12 @@ namespace Nikse.SubtitleEdit.Forms
             OpenNewFile();
             toolStripButtonFileOpen.Enabled = true;
             Interlocked.Decrement(ref _openSaveCounter);
+        }
+
+        private void ToolStripButtonTabiiClick(object sender, EventArgs e)
+        {
+            // Burada butona tıklandığında yapılacak işlemleri yazabilirsiniz
+            MessageBox.Show("Tabii butonu tıklandı!");
         }
 
         private void ToolStripButtonSaveClick(object sender, EventArgs e)
@@ -7731,6 +7738,39 @@ namespace Nikse.SubtitleEdit.Forms
         }
 
         private void HelpToolStripMenuItem1Click(object sender, EventArgs e)
+        {
+            if (_intellisenceList != null && _intellisenceList.Focused)
+            {
+                if (_intellisenceList.Items[_intellisenceList.SelectedIndex] is AssaTagHelper.IntellisenseItem item && !string.IsNullOrEmpty(item.HelpLink))
+                {
+                    UiUtil.OpenUrl(item.HelpLink);
+                }
+
+                return;
+            }
+
+            if (_intellisenceListOriginal != null && _intellisenceListOriginal.Focused)
+            {
+                if (_intellisenceListOriginal.Items[_intellisenceListOriginal.SelectedIndex] is AssaTagHelper.IntellisenseItem item && !string.IsNullOrEmpty(item.HelpLink))
+                {
+                    UiUtil.OpenUrl(item.HelpLink);
+                }
+
+                return;
+            }
+
+            ReloadFromSourceView();
+            UiUtil.ShowHelp(string.Empty);
+        }
+        private void tabiiToolStripMenuItemGlossaryClick(object sender, EventArgs e)
+        {
+            using (var form = new Glossary())
+            {
+                form.ShowDialog(this);
+            }
+
+        }
+        private void tabiiToolStripMenuItemContextClick(object sender, EventArgs e)
         {
             if (_intellisenceList != null && _intellisenceList.Focused)
             {
@@ -18000,7 +18040,7 @@ namespace Nikse.SubtitleEdit.Forms
                 if (mediaPlayer.VideoPlayer != null)
                 {
                     if (_shortcuts.VideoPlayPauseToggle == Keys.Space &&
-                        (textBoxListViewText.Focused || textBoxListViewTextOriginal.Focused || textBoxSearchWord.Focused || textBoxSource.Focused ))
+                        (textBoxListViewText.Focused || textBoxListViewTextOriginal.Focused || textBoxSearchWord.Focused || textBoxSource.Focused))
                     {
                         return;
                     }
