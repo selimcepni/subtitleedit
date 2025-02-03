@@ -7772,28 +7772,10 @@ namespace Nikse.SubtitleEdit.Forms
         }
         private void tabiiToolStripMenuItemContextClick(object sender, EventArgs e)
         {
-            if (_intellisenceList != null && _intellisenceList.Focused)
+            using (var form = new Context())
             {
-                if (_intellisenceList.Items[_intellisenceList.SelectedIndex] is AssaTagHelper.IntellisenseItem item && !string.IsNullOrEmpty(item.HelpLink))
-                {
-                    UiUtil.OpenUrl(item.HelpLink);
-                }
-
-                return;
+                form.ShowDialog(this);
             }
-
-            if (_intellisenceListOriginal != null && _intellisenceListOriginal.Focused)
-            {
-                if (_intellisenceListOriginal.Items[_intellisenceListOriginal.SelectedIndex] is AssaTagHelper.IntellisenseItem item && !string.IsNullOrEmpty(item.HelpLink))
-                {
-                    UiUtil.OpenUrl(item.HelpLink);
-                }
-
-                return;
-            }
-
-            ReloadFromSourceView();
-            UiUtil.ShowHelp(string.Empty);
         }
         private void AddToGlossaryToolStripMenuItemClick(object sender, EventArgs e)
         {
