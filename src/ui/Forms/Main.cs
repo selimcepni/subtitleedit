@@ -52,6 +52,7 @@ using CheckForUpdatesHelper = Nikse.SubtitleEdit.Logic.CheckForUpdatesHelper;
 using MessageBox = Nikse.SubtitleEdit.Forms.SeMsgBox.MessageBox;
 using Timer = System.Windows.Forms.Timer;
 
+
 namespace Nikse.SubtitleEdit.Forms
 {
     public sealed partial class Main : Form, IReloadSubtitle, IFindAndReplace
@@ -7773,6 +7774,13 @@ namespace Nikse.SubtitleEdit.Forms
         private void tabiiToolStripMenuItemContextClick(object sender, EventArgs e)
         {
             using (var form = new Context())
+            {
+                form.ShowDialog(this);
+            }
+        }
+        private void tabiiToolStripMenuItemLogicClick(object sender, EventArgs e)
+        {
+             using (var form = new LogicForm())
             {
                 form.ShowDialog(this);
             }

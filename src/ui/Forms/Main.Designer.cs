@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using Nikse.SubtitleEdit.Controls;
 
+
 namespace Nikse.SubtitleEdit.Forms
 {
     sealed partial class Main
@@ -286,6 +287,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tabiiToolStripMenuItemGlossary = new System.Windows.Forms.ToolStripMenuItem();
             this.tabiiToolStripMenuItemContext = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabiiToolStripMenuItemLogic = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripListView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setStylesForSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -2710,9 +2712,11 @@ namespace Nikse.SubtitleEdit.Forms
             // this.toolStripMenuItemSplitterCheckForUpdates,
             this.tabiiToolStripMenuItemGlossary,
             this.tabiiToolStripMenuItemContext,
+            this.tabiiToolStripMenuItemLogic,
             // this.aboutToolStripMenuItem
             });
             this.tabiiToolStripMenuItem.Name = "tabiiToolStripMenuItem";
+
             this.tabiiToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.tabiiToolStripMenuItem.Text = "Tabii";
             this.tabiiToolStripMenuItem.DropDownClosed += new System.EventHandler(this.MenuClosed);
@@ -2748,16 +2752,20 @@ namespace Nikse.SubtitleEdit.Forms
             this.tabiiToolStripMenuItemGlossary.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T;
             this.tabiiToolStripMenuItemGlossary.Click += new System.EventHandler(this.tabiiToolStripMenuItemGlossaryClick);
             // 
-
-
-
-               // tabiiToolStripMenuItemContext
+            // tabiiToolStripMenuItemContext
             // 
             this.tabiiToolStripMenuItemContext.Name = "tabiiToolStripMenuItemContext";
             // this.tabiiToolStripMenuItemGlossary.ShortcutKeys = System.Windows.Forms.Keys.F1;            
             this.tabiiToolStripMenuItemContext.Size = new System.Drawing.Size(181, 22);
             this.tabiiToolStripMenuItemContext.Text = "Context";
             this.tabiiToolStripMenuItemContext.Click += new System.EventHandler(this.tabiiToolStripMenuItemContextClick);
+            // 
+            // tabiiToolStripMenuItemLogic
+            // 
+            this.tabiiToolStripMenuItemLogic.Name = "tabiiToolStripMenuItemLogic";
+            this.tabiiToolStripMenuItemLogic.Size = new System.Drawing.Size(181, 22);
+            this.tabiiToolStripMenuItemLogic.Text = "Logic";
+            this.tabiiToolStripMenuItemLogic.Click += new System.EventHandler(this.tabiiToolStripMenuItemLogicClick);
             // 
             // aboutToolStripMenuItem
             // 
@@ -6097,6 +6105,7 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItemGlossary;
         private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItemContext;
+        private System.Windows.Forms.ToolStripMenuItem tabiiToolStripMenuItemLogic;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
