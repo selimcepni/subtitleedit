@@ -46,6 +46,7 @@ namespace Nikse.SubtitleEdit.Logic
         public Keys MainGeneralGoToStartOfCurrentSubtitle { get; set; }
         public Keys MainGeneralGoToEndOfCurrentSubtitle { get; set; }
         public Keys MainGeneralFileSaveAll { get; set; }
+        public Keys MainGeneralOpenGlossary { get; set; }
         public Keys MainGeneralSetAssaResolution { get; set; }
         public Keys MainGeneralTakeAutoBackupNow { get; set; }
         public Keys MainToolsAutoDuration { get; set; }
@@ -303,6 +304,7 @@ namespace Nikse.SubtitleEdit.Logic
             MainGeneralToggleTranslationMode = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralToggleTranslationMode);
             MainGeneralSwitchTranslationAndOriginal = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralSwitchOriginalAndTranslation);
             MainGeneralSwitchTranslationAndOriginalTextBoxes = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralSwitchOriginalAndTranslationTextBoxes);
+            MainGeneralOpenGlossary = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralOpenGlossary);
             MainGeneralLayoutChoose = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralLayoutChoose);
             MainGeneralLayoutChoose1 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralLayoutChoose1);
             MainGeneralLayoutChoose2 = UiUtil.GetKeys(Configuration.Settings.Shortcuts.GeneralLayoutChoose2);

@@ -80,6 +80,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public string GeneralHelp { get; set; }
         public string GeneralFocusTextBox { get; set; }
         public string GeneralCycleAudioTrack { get; set; }
+        public string GeneralOpenGlossary { get; set; }
 
         // File
         public string MainFileNew { get; set; }
@@ -429,6 +430,7 @@ namespace Nikse.SubtitleEdit.Core.Settings
             OpenDataFolder = "Control+Alt+Shift+D";
             GeneralToggleView = "F2";
             GeneralHelp = "F1";
+            GeneralOpenGlossary = "Control+T";
             MainFileNew = "Control+N";
             MainFileOpen = "Control+O";
             MainFileSave = "Control+S";

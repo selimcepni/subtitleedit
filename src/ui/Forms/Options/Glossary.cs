@@ -41,7 +41,7 @@ namespace Nikse.SubtitleEdit.Forms
         private const string TERM_API_URL = "https://us-central1-peaceful-branch-448020-i9.cloudfunctions.net/tabiitermlist";
         private ListBox _termSuggestionList;
 
-        public Glossary()
+            public Glossary(string selectedText = "")
         {
             UiUtil.PreInitialize(this);
             InitializeComponent();
@@ -57,6 +57,12 @@ namespace Nikse.SubtitleEdit.Forms
 
             textBoxTerm.TextChanged += TextBoxTerm_TextChanged;
             Text = "Glossary";
+
+            // Seçili metni term textbox'ına yaz
+            if (!string.IsNullOrEmpty(selectedText))
+            {
+                textBoxTerm.Text = selectedText;
+            }
         }
 
         private void InitializeTermSuggestionList()
@@ -207,9 +213,91 @@ namespace Nikse.SubtitleEdit.Forms
             }
         }
 
-        private void buttonSend_Click(object sender, EventArgs e)
+        private async void buttonSend_Click(object sender, EventArgs e)
         {
-            // Send functionality will be implemented later
+            // Validate all fields
+            if (string.IsNullOrWhiteSpace(textBoxTerm.Text))
+            {
+                MessageBox.Show("Please enter a term.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxTerm.Focus();
+                return;
+            }
+
+            if (comboBoxTargetLanguage.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a target language.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxTargetLanguage.Focus();
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(textBoxTranslations.Text))
+            {
+                MessageBox.Show("Please enter translations.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBoxTranslations.Focus();
+                return;
+            }
+
+            if (comboBoxProject.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a project.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxProject.Focus();
+                return;
+            }
+
+            if (comboBoxUser.SelectedItem == null)
+            {
+                MessageBox.Show("Please select a user.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBoxUser.Focus();
+                return;
+            }
+
+            try
+            {
+                // Disable the send button while processing
+                buttonSend.Enabled = false;
+                Cursor = Cursors.WaitCursor;
+
+                // Prepare the data
+                var requestData = new
+                {
+                    term = textBoxTerm.Text.Trim(),
+                    targetLanguage = comboBoxTargetLanguage.SelectedItem.ToString(),
+                    translations = textBoxTranslations.Text.Trim(),
+                    project = ((Project)comboBoxProject.SelectedItem).Name,
+                    user = ((User)comboBoxUser.SelectedItem).Name
+                };
+
+                // Convert to JSON
+                var jsonContent = JsonConvert.SerializeObject(requestData);
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                // TODO: Replace with actual endpoint
+                const string API_ENDPOINT = "YOUR_API_ENDPOINT_HERE";
+
+                // Send POST request
+                var response = await _httpClient.PostAsync(API_ENDPOINT, content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Term successfully added to glossary.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show($"Error adding term to glossary: {responseContent}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                buttonSend.Enabled = true;
+                Cursor = Cursors.Default;
+            }
         }
 
         protected override void Dispose(bool disposing)

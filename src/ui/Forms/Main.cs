@@ -7795,6 +7795,22 @@ namespace Nikse.SubtitleEdit.Forms
             ReloadFromSourceView();
             UiUtil.ShowHelp(string.Empty);
         }
+        private void AddToGlossaryToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            string selectedText = textBoxListViewText.SelectedText;
+            if (!string.IsNullOrEmpty(selectedText))
+            {
+                using (var form = new Glossary(selectedText))
+                {
+                    form.ShowDialog(this);
+                }
+            }
+        }
+
+        private void contextMenuStripTextBoxListView_Opening(object sender, CancelEventArgs e)
+        {
+            addToGlossaryToolStripMenuItem.Enabled = !string.IsNullOrEmpty(textBoxListViewText.SelectedText);
+        }
 
         private void ToolStripButtonHelpClick(object sender, EventArgs e)
         {
@@ -17151,6 +17167,14 @@ namespace Nikse.SubtitleEdit.Forms
             else if (e.KeyData == _shortcuts.VideoPlayFirstSelected && !string.IsNullOrEmpty(_videoFileName))
             {
                 PlayFirstSelectedSubtitle();
+            }
+            else if (_shortcuts.MainGeneralOpenGlossary == e.KeyData)
+            {
+                using (var form = new Glossary())
+                {
+                    form.ShowDialog(this);
+                }
+                e.SuppressKeyPress = true;
             }
             else if (audioVisualizer.Visible && (e.KeyData == _shortcuts.WaveformPlaySelection || e.KeyData == _shortcuts.WaveformPlaySelectionEnd))
             {

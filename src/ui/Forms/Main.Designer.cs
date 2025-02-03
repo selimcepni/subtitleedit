@@ -76,7 +76,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripButtonHelp = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparatorTabii = new Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator();
             this.toolStripButtonTabii = new System.Windows.Forms.ToolStripButton();
-           
+            this.addToGlossaryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();        
             this.toolStripSeparatorToggle = new Nikse.SubtitleEdit.Controls.ToolStripNikseSeparator();
             this.toolStripButtonSourceView = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLayout = new System.Windows.Forms.ToolStripButton();
@@ -2745,8 +2745,11 @@ namespace Nikse.SubtitleEdit.Forms
             // this.tabiiToolStripMenuItemGlossary.ShortcutKeys = System.Windows.Forms.Keys.F1;            
             this.tabiiToolStripMenuItemGlossary.Size = new System.Drawing.Size(181, 22);
             this.tabiiToolStripMenuItemGlossary.Text = "Glossary";
+            this.tabiiToolStripMenuItemGlossary.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T;
             this.tabiiToolStripMenuItemGlossary.Click += new System.EventHandler(this.tabiiToolStripMenuItemGlossaryClick);
             // 
+
+
 
                // tabiiToolStripMenuItemContext
             // 
@@ -5011,6 +5014,7 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripSeparatorSpellCheckSuggestions,
             this.toolStripMenuItemSpellCheckSkipOnce,
             this.toolStripMenuItemSpellCheckSkipAll,
+            this.addToGlossaryToolStripMenuItem,
             this.toolStripMenuItemSpellCheckAddToDictionary,
             this.toolStripMenuItemSpellCheckAddToNames,
             this.toolStripSeparatorSpellCheck,
@@ -5060,6 +5064,13 @@ namespace Nikse.SubtitleEdit.Forms
             this.toolStripMenuItemSpellCheckSkipOnce.Text = "Skip once";
             this.toolStripMenuItemSpellCheckSkipOnce.Visible = false;
             this.toolStripMenuItemSpellCheckSkipOnce.Click += new System.EventHandler(this.ToolStripMenuItemSpellCheckSkipOnceClick);
+            // 
+            // toolStripMenuItemAddToGlossary
+            //            
+            this.addToGlossaryToolStripMenuItem.Name = "addToGlossaryToolStripMenuItem";
+            this.addToGlossaryToolStripMenuItem.Text = "Add to Glossary";
+            this.addToGlossaryToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T;
+            this.addToGlossaryToolStripMenuItem.Click += new System.EventHandler(this.AddToGlossaryToolStripMenuItemClick);
             // 
             // toolStripMenuItemSpellCheckSkipAll
             // 
@@ -6327,6 +6338,7 @@ namespace Nikse.SubtitleEdit.Forms
         private System.Windows.Forms.ToolStripMenuItem editSelectAllToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTextBoxListView;
         private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addToGlossaryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
