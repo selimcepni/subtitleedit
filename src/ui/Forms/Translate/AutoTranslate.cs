@@ -137,6 +137,8 @@ namespace Nikse.SubtitleEdit.Forms.Translate
                 new DeepLXTranslate(),
                 new NoLanguageLeftBehindServe(),
                 new NoLanguageLeftBehindApi(),
+                new GoogleTranslateV3(),
+                new GoogleCloudCustomTranslate(),
             };
 
             nikseComboBoxEngine.Items.Clear();
@@ -507,6 +509,24 @@ namespace Nikse.SubtitleEdit.Forms.Translate
                 nikseTextBoxApiKey.Left = labelApiKey.Right + 3;
                 labelApiKey.Visible = true;
                 nikseTextBoxApiKey.Visible = true;
+                return;
+            }
+
+            if (engineType == typeof(GoogleTranslateV3))
+            {
+                labelUrl.Visible = false;
+                nikseComboBoxUrl.Visible = false;
+                labelApiKey.Visible = false;
+                nikseTextBoxApiKey.Visible = false;
+                return;
+            }
+
+            if (engineType == typeof(GoogleCloudCustomTranslate))
+            {
+                labelUrl.Visible = false;
+                nikseComboBoxUrl.Visible = false;
+                labelApiKey.Visible = false;
+                nikseTextBoxApiKey.Visible = false;
                 return;
             }
 
@@ -1231,6 +1251,17 @@ namespace Nikse.SubtitleEdit.Forms.Translate
                 Configuration.Settings.Tools.AutoTranslatePapagoApiKeyId = nikseComboBoxUrl.Text.Trim();
                 Configuration.Settings.Tools.AutoTranslatePapagoApiKey = nikseTextBoxApiKey.Text.Trim();
             }
+
+            if (engineType == typeof(GoogleCloudCustomTranslate) && !string.IsNullOrWhiteSpace(nikseTextBoxApiKey.Text))
+            {
+                Configuration.Settings.Tools.GoogleCloudCustomUrl = nikseComboBoxUrl.Text.Trim();
+                Configuration.Settings.Tools.GoogleCloudApiKey = nikseTextBoxApiKey.Text.Trim();
+            }
+
+            if (engineType == typeof(GoogleTranslateV3) && !string.IsNullOrWhiteSpace(nikseTextBoxApiKey.Text))
+            {
+                Configuration.Settings.Tools.GoogleTranslateV3ApiKey = nikseTextBoxApiKey.Text.Trim();
+            }
         }
 
         private static void StartNoLanguageLeftBehindServe()
@@ -1602,7 +1633,7 @@ namespace Nikse.SubtitleEdit.Forms.Translate
 
         private async void UpdateLocalModelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            await DownloadOllamaModelsAsync(shouldNotifyOnError: true);
+            await DownloadOllamaModelsAsync();
         }
 
         private async Task DownloadOllamaModelsAsync(bool shouldNotifyOnError = false)

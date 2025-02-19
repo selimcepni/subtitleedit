@@ -89,66 +89,66 @@ namespace Nikse.SubtitleEdit.Controls
 
         public int FirstVisibleIndex { get; set; } = -1;
 
-        public void InitializeLanguage(LanguageStructure.General general, Settings settings)
+        public void InitializeLanguage(LanguageStructure.General language, Nikse.SubtitleEdit.Core.Settings.Settings settings)
         {
             int idx = GetColumnIndex(SubtitleColumn.Number);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.NumberSymbol;
+                Columns[idx].Text = language.NumberSymbol;
             }
 
             idx = GetColumnIndex(SubtitleColumn.Start);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.StartTime;
+                Columns[idx].Text = language.StartTime;
             }
 
             idx = GetColumnIndex(SubtitleColumn.End);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.EndTime;
+                Columns[idx].Text = language.EndTime;
             }
 
             idx = GetColumnIndex(SubtitleColumn.Duration);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.Duration;
+                Columns[idx].Text = language.Duration;
             }
 
             idx = GetColumnIndex(SubtitleColumn.CharactersPerSeconds);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.CharsPerSec;
+                Columns[idx].Text = language.CharsPerSec;
             }
 
             idx = GetColumnIndex(SubtitleColumn.WordsPerMinute);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.WordsPerMin;
+                Columns[idx].Text = language.WordsPerMin;
             }
 
             idx = GetColumnIndex(SubtitleColumn.Gap);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.Gap;
+                Columns[idx].Text = language.Gap;
             }
 
             idx = GetColumnIndex(SubtitleColumn.Actor);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.Actor;
+                Columns[idx].Text = language.Actor;
             }
 
             idx = GetColumnIndex(SubtitleColumn.Region);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.Region;
+                Columns[idx].Text = language.Region;
             }
 
             idx = GetColumnIndex(SubtitleColumn.Text);
             if (idx >= 0)
             {
-                Columns[idx].Text = general.Text;
+                Columns[idx].Text = language.Text;
             }
 
             if (settings.General.ListViewLineSeparatorString != null)

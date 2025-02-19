@@ -71,6 +71,12 @@ namespace Nikse.SubtitleEdit.Forms.Translate
             var linesTranslate = 0;
             var mergedTranslation = await autoTranslator.Translate(text, source.Code, target.Code, cancellationToken);
 
+            // Update target subtitle immediately after successful translation
+            if (!string.IsNullOrEmpty(mergedTranslation))
+            {
+                targetSubtitle.Paragraphs[index].Text = mergedTranslation;
+                linesTranslate++;
+            }
 
             // Split by line ending chars where period count matches
             var splitResult = SplitMultipleLines(mergeResult, mergedTranslation, target.Code);

@@ -1,4 +1,4 @@
-﻿using Nikse.SubtitleEdit.Core.Common;
+using Nikse.SubtitleEdit.Core.Common;
 using Nikse.SubtitleEdit.Core.Http;
 using Nikse.SubtitleEdit.Core.Translate;
 using System;
@@ -23,15 +23,16 @@ using Newtonsoft.Json.Linq;
 namespace Nikse.SubtitleEdit.Core.AutoTranslate
 {
     /// <summary>
-    /// Google translate via Google Cloud V2 API - see https://cloud.google.com/translate/
+    /// Google translate via Google Cloud V3 API - see https://cloud.google.com/translate/docs/reference/rest/v3/projects.locations/translateText
     /// </summary>
-    public class GoogleTranslateV2 : IAutoTranslator, IDisposable
+    public class GoogleTranslateV3 : IAutoTranslator, IDisposable
     {
         private string _accessToken;
         private DateTime _tokenExpiration;
         private IDownloader _httpClient;
+        private string _projectId;
 
-        public static string StaticName { get; set; } = "Google Translate V2 API";
+        public static string StaticName { get; set; } = "Google Translate V3 API";
         public override string ToString() => StaticName;
         public string Name => StaticName;
         public string Url => "https://translate.google.com/";
@@ -79,17 +80,17 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
             }
 
             var credentialsPath = Path.Combine(Configuration.BaseDirectory, "googlecloudserviceaccount.json");
-            SeLogger.Error($"[GoogleTranslateV2 Request Log] Looking for credentials at: {credentialsPath}");
+            SeLogger.Error($"[GoogleTranslateV3 Request Log] Looking for credentials at: {credentialsPath}");
 
             if (!File.Exists(credentialsPath))
             {
                 credentialsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "googlecloudserviceaccount.json");
-                SeLogger.Error($"[GoogleTranslateV2 Request Log] Looking for credentials at: {credentialsPath}");
+                SeLogger.Error($"[GoogleTranslateV3 Request Log] Looking for credentials at: {credentialsPath}");
 
                 if (!File.Exists(credentialsPath))
                 {
                     credentialsPath = "googlecloudserviceaccount.json";
-                    SeLogger.Error($"[GoogleTranslateV2 Request Log] Looking for credentials at: {credentialsPath}");
+                    SeLogger.Error($"[GoogleTranslateV3 Request Log] Looking for credentials at: {credentialsPath}");
 
                     if (!File.Exists(credentialsPath))
                     {
@@ -101,24 +102,21 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
             var credentials = File.ReadAllText(credentialsPath);
             var credentialsJson = JObject.Parse(credentials);
             
-            if (!credentialsJson.ContainsKey("private_key") || !credentialsJson.ContainsKey("client_email"))
+            if (!credentialsJson.ContainsKey("private_key") || !credentialsJson.ContainsKey("client_email") || !credentialsJson.ContainsKey("project_id"))
             {
-                throw new Exception("Invalid service account credentials file. Missing private_key or client_email.");
+                throw new Exception("Invalid service account credentials file. Missing private_key, client_email, or project_id.");
             }
             
+            _projectId = credentialsJson["project_id"].Value<string>();
             var privateKey = credentialsJson["private_key"].Value<string>();
-            if (string.IsNullOrWhiteSpace(privateKey))
-            {
-                throw new Exception("Private key is empty in the service account credentials file.");
-            }
-            
             var clientEmail = credentialsJson["client_email"].Value<string>();
-            if (string.IsNullOrWhiteSpace(clientEmail))
+
+            if (string.IsNullOrWhiteSpace(privateKey) || string.IsNullOrWhiteSpace(clientEmail) || string.IsNullOrWhiteSpace(_projectId))
             {
-                throw new Exception("Client email is empty in the service account credentials file.");
+                throw new Exception("Required credentials are empty in the service account credentials file.");
             }
 
-            SeLogger.Error($"[GoogleTranslateV2 Request Log] Using client email: {clientEmail}");
+            SeLogger.Error($"[GoogleTranslateV3 Request Log] Using client email: {clientEmail}");
 
             var now = DateTime.UtcNow;
             var expiration = now.AddHours(1);
@@ -183,7 +181,7 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
         public void Initialize()
         {
             _httpClient = DownloaderFactory.MakeHttpClient();
-            _httpClient.BaseAddress = new Uri("https://translation.googleapis.com/language/translate/v2/");
+            _httpClient.BaseAddress = new Uri("https://translate.googleapis.com/v3/");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
@@ -199,45 +197,43 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
 
         public async Task<string> Translate(string text, string sourceLanguageCode, string targetLanguageCode, CancellationToken cancellationToken)
         {
-            var format = "text";
-            var input = new StringBuilder();
-            input.Append("q=" + Utilities.UrlEncode(text));
             var accessToken = await GetAccessTokenAsync();
-            var uri = $"?{input}&target={targetLanguageCode}&source={sourceLanguageCode}&format={format}";
+            var requestUrl = $"projects/{_projectId}/locations/global:translateText";
 
-            SeLogger.Error($"[GoogleTranslateV2 Request Log] Request URL: {_httpClient.BaseAddress}{uri}");
-            SeLogger.Error($"[GoogleTranslateV2 Request Log] Authorization: Bearer {accessToken.Substring(0, 10)}...");
+            var requestBody = new
+            {
+                contents = new[] { text },
+                sourceLanguageCode,
+                targetLanguageCode,
+                mimeType = "text/plain"
+            };
+
+            var jsonContent = JsonConvert.SerializeObject(requestBody);
+            
+            SeLogger.Error($"[GoogleTranslateV3 Request Log] Request URL: {_httpClient.BaseAddress}{requestUrl}");
+            SeLogger.Error($"[GoogleTranslateV3 Request Log] Request Body: {jsonContent}");
+            SeLogger.Error($"[GoogleTranslateV3 Request Log] Authorization: Bearer {accessToken.Substring(0, 10)}...");
 
             string content;
             try
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var result = await _httpClient.PostAsync(uri, new StringContent(string.Empty));
+                var result = await _httpClient.PostAsync(requestUrl, new StringContent(jsonContent, Encoding.UTF8, "application/json"));
 
                 content = await result.Content.ReadAsStringAsync();
-                SeLogger.Error($"[GoogleTranslateV2 Request Log] Response Status: {result.StatusCode}");
-                SeLogger.Error($"[GoogleTranslateV2 Request Log] Response Content: {content}");
+                SeLogger.Error($"[GoogleTranslateV3 Request Log] Response Status: {result.StatusCode}");
+                SeLogger.Error($"[GoogleTranslateV3 Request Log] Response Content: {content}");
 
                 if (!result.IsSuccessStatusCode)
                 {
-                    try
-                    {
-                        Error = content;
-                        SeLogger.Error($"Error in {StaticName}.Translate: " + Error);
-                    }
-                    catch
-                    {
-                        // ignore
-                    }
-                }
+                    Error = content;
+                    SeLogger.Error($"Error in {StaticName}.Translate: " + Error);
 
-                if ((int)result.StatusCode == 401)
-                {                   
-                    throw new Exception("Authentication failed. Please check your service account credentials.");
-                }
+                    if ((int)result.StatusCode == 401)
+                    {                   
+                        throw new Exception("Authentication failed. Please check your service account credentials.");
+                    }
 
-                if (!result.IsSuccessStatusCode)
-                {
                     throw new Exception($"An error occurred calling GT translate - status code: {result.StatusCode}");
                 }
             }
@@ -252,48 +248,30 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
                 throw new Exception(message, webException);
             }
 
-            var resultList = new List<string>();
-            var parser = new JsonParser();
-            var x = (Dictionary<string, object>)parser.Parse(content);
-            foreach (var k in x.Keys)
+            var response = JObject.Parse(content);
+            var translations = response["translations"] as JArray;
+            
+            if (translations == null || translations.Count == 0)
             {
-                if (x[k] is Dictionary<string, object> v)
-                {
-                    foreach (var innerKey in v.Keys)
-                    {
-                        if (v[innerKey] is List<object> l)
-                        {
-                            foreach (var o2 in l)
-                            {
-                                if (o2 is Dictionary<string, object> v2)
-                                {
-                                    foreach (var innerKey2 in v2.Keys)
-                                    {
-                                        if (v2[innerKey2] is string translatedText)
-                                        {
-                                            try
-                                            {
-                                                translatedText = Regex.Unescape(translatedText);
-                                            }
-                                            catch
-                                            {
-                                                translatedText = translatedText.Replace("\\n", "\n");
-                                            }
-
-                                            translatedText = string.Join(Environment.NewLine, translatedText.SplitToLines());
-                                            translatedText = TranslationHelper.PostTranslate(translatedText, targetLanguageCode);
-                                            resultList.Add(translatedText);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                throw new Exception("No translation received from Google Translate V3");
             }
-            return string.Join(Environment.NewLine, resultList);
+
+            var translatedText = translations[0]["translatedText"].ToString();
+            try
+            {
+                translatedText = Regex.Unescape(translatedText);
+            }
+            catch
+            {
+                translatedText = translatedText.Replace("\\n", "\n");
+            }
+
+            translatedText = string.Join(Environment.NewLine, translatedText.SplitToLines());
+            translatedText = TranslationHelper.PostTranslate(translatedText, targetLanguageCode);
+
+            return translatedText;
         }
 
         public void Dispose() => _httpClient?.Dispose();
     }
-}
+} 

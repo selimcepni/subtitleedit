@@ -447,6 +447,10 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public int BreakLinesLongerThan { get; set; }
         public int UnbreakLinesLongerThan { get; set; }
 
+        public string GoogleCloudCustomUrl { get; set; }
+        public string GoogleCloudApiKey { get; set; }
+        public string GoogleTranslateV3ApiKey { get; set; }
+
         public ToolsSettings()
         {
             AssaTagTemplates = new List<AssaTemplateItem>();
@@ -708,6 +712,10 @@ namespace Nikse.SubtitleEdit.Core.Settings
             AudioToTextLineMaxChars = 86;
             AudioToTextLineMaxCharsJp = 32;
             AudioToTextLineMaxCharsCn = 36;
+
+            GoogleCloudCustomUrl = string.Empty;
+            GoogleCloudApiKey = string.Empty;
+            GoogleTranslateV3ApiKey = string.Empty;
         }
     }
 }
