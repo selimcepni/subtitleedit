@@ -6355,8 +6355,7 @@ namespace Nikse.SubtitleEdit.Forms
         }
 
         private void ToolStripButtonTabiiClick(object sender, EventArgs e)
-        {
-            // Burada butona tıklandığında yapılacak işlemleri yazabilirsiniz
+        {           
             MessageBox.Show("Tabii butonu tıklandı!");
         }
 

@@ -518,6 +518,16 @@ namespace Nikse.SubtitleEdit.Forms.Translate
                 nikseComboBoxUrl.Visible = false;
                 labelApiKey.Visible = false;
                 nikseTextBoxApiKey.Visible = false;
+
+                labelFormality.Text = "Use Glossary";
+                labelFormality.Left = labelUrl.Left;
+                labelFormality.Visible = true;
+                comboBoxFormality.Items.Clear();
+                comboBoxFormality.Items.Add("No");
+                comboBoxFormality.Items.Add("Yes");
+                comboBoxFormality.Left = labelFormality.Right + 5;
+                comboBoxFormality.SelectedIndex = Configuration.Settings.Tools.GoogleTranslateV3UseGlossary ? 1 : 0;
+                comboBoxFormality.Visible = true;
                 return;
             }
 
@@ -1258,9 +1268,9 @@ namespace Nikse.SubtitleEdit.Forms.Translate
                 Configuration.Settings.Tools.GoogleCloudApiKey = nikseTextBoxApiKey.Text.Trim();
             }
 
-            if (engineType == typeof(GoogleTranslateV3) && !string.IsNullOrWhiteSpace(nikseTextBoxApiKey.Text))
+            if (engineType == typeof(GoogleTranslateV3))
             {
-                Configuration.Settings.Tools.GoogleTranslateV3ApiKey = nikseTextBoxApiKey.Text.Trim();
+                Configuration.Settings.Tools.GoogleTranslateV3UseGlossary = comboBoxFormality.SelectedIndex == 1;
             }
         }
 

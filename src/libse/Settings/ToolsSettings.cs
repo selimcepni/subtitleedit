@@ -450,6 +450,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
         public string GoogleCloudCustomUrl { get; set; }
         public string GoogleCloudApiKey { get; set; }
         public string GoogleTranslateV3ApiKey { get; set; }
+        public bool GoogleTranslateV3UseGlossary { get; set; }
+        public string GoogleTranslateV3GlossaryPath { get; set; }
 
         public ToolsSettings()
         {
@@ -716,6 +718,8 @@ namespace Nikse.SubtitleEdit.Core.Settings
             GoogleCloudCustomUrl = string.Empty;
             GoogleCloudApiKey = string.Empty;
             GoogleTranslateV3ApiKey = string.Empty;
+            GoogleTranslateV3UseGlossary = false;
+            GoogleTranslateV3GlossaryPath = string.Empty;
         }
     }
 }

@@ -200,12 +200,20 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
             var accessToken = await GetAccessTokenAsync();
             var requestUrl = $"projects/{_projectId}/locations/global:translateText";
 
+            // Sabit glossary yolu
+            var glossaryPath = $"projects/stable-ring-451207-n1/locations/global/glossaries/tr_es_glossary";
+
             var requestBody = new
             {
                 contents = new[] { text },
                 sourceLanguageCode,
                 targetLanguageCode,
-                mimeType = "text/plain"
+                mimeType = "text/plain",
+                glossaryConfig = new
+                {
+                    glossary = glossaryPath,
+                    ignoreCase = true
+                }
             };
 
             var jsonContent = JsonConvert.SerializeObject(requestBody);
@@ -249,6 +257,37 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
             }
 
             var response = JObject.Parse(content);
+
+            // Önce glossary çevirisini kontrol et
+            var glossaryTranslations = response["glossaryTranslations"] as JArray;
+            if (glossaryTranslations != null && glossaryTranslations.Count > 0)
+            {
+                SeLogger.Error($"[GoogleTranslateV3 Glossary Log] Glossary translation found for text: {text}");
+                SeLogger.Error($"[GoogleTranslateV3 Glossary Log] Glossary translations count: {glossaryTranslations.Count}");
+                SeLogger.Error($"[GoogleTranslateV3 Glossary Log] Using glossary path: {glossaryPath}");
+
+                var translatedText = glossaryTranslations[0]["translatedText"].ToString();
+                try
+                {
+                    translatedText = Regex.Unescape(translatedText);
+                }
+                catch
+                {
+                    translatedText = translatedText.Replace("\\n", "\n");
+                }
+
+                translatedText = string.Join(Environment.NewLine, translatedText.SplitToLines());
+                translatedText = TranslationHelper.PostTranslate(translatedText, targetLanguageCode);
+
+                SeLogger.Error($"[GoogleTranslateV3 Glossary Log] Final translated text using glossary: {translatedText}");
+                return translatedText;
+            }
+            else
+            {
+                SeLogger.Error($"[GoogleTranslateV3 Glossary Log] No glossary translation found for text: {text}");
+            }
+
+            // Glossary çevirisi yoksa normal çeviriyi kullan
             var translations = response["translations"] as JArray;
             
             if (translations == null || translations.Count == 0)
@@ -256,20 +295,20 @@ namespace Nikse.SubtitleEdit.Core.AutoTranslate
                 throw new Exception("No translation received from Google Translate V3");
             }
 
-            var translatedText = translations[0]["translatedText"].ToString();
+            var normalTranslatedText = translations[0]["translatedText"].ToString();
             try
             {
-                translatedText = Regex.Unescape(translatedText);
+                normalTranslatedText = Regex.Unescape(normalTranslatedText);
             }
             catch
             {
-                translatedText = translatedText.Replace("\\n", "\n");
+                normalTranslatedText = normalTranslatedText.Replace("\\n", "\n");
             }
 
-            translatedText = string.Join(Environment.NewLine, translatedText.SplitToLines());
-            translatedText = TranslationHelper.PostTranslate(translatedText, targetLanguageCode);
+            normalTranslatedText = string.Join(Environment.NewLine, normalTranslatedText.SplitToLines());
+            normalTranslatedText = TranslationHelper.PostTranslate(normalTranslatedText, targetLanguageCode);
 
-            return translatedText;
+            return normalTranslatedText;
         }
 
         public void Dispose() => _httpClient?.Dispose();
